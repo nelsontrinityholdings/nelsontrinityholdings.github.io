@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth" data-theme="institution">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nelson Trinity Holdings | Specialized Venture Capital & Real Estate Equity</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- THEME VARIABLES --- */
+        /* Defaulting to Institution based on user preference */
+        :root {
+            --bg-color: #fdfbf7; /* Warm White */
+            --surface-color: #f5f2eb;
+            --text-color: #1a1a1a;
+            --text-muted: #57534e;
+            --accent-color: #14532d; /* Deep Green */
+            --heading-font: 'Cormorant Garamond', serif;
+            --body-font: 'Montserrat', sans-serif;
+            --border-color: rgba(20, 83, 45, 0.2);
+            --img-opacity: 0.9;
+            --img-filter: sepia(0.2) contrast(0.95);
+            
+            /* CHANGED: Permanent White Background for Toolbar */
+            --nav-bg: #ffffff; 
+            
+            --button-hover-bg: #14532d;
+            --button-hover-text: #ffffff;
+        }
+
+        /* Theme: The Mogul (Alternative) */
+        [data-theme="mogul"] {
+            --bg-color: #050505;
+            --surface-color: #0a0a0a;
+            --text-color: #f4f4f4;
+            --text-muted: #9ca3af;
+            --accent-color: #ffffff;
+            --heading-font: 'Playfair Display', serif;
+            --body-font: 'Lato', sans-serif;
+            --border-color: rgba(255,255,255,0.2);
+            --img-opacity: 0.6;
+            --img-filter: brightness(0.5) contrast(1.25);
+            
+            /* CHANGED: Solid Dark Background */
+            --nav-bg: #050505;
+            
+            --button-hover-bg: #ffffff;
+            --button-hover-text: #000000;
+        }
+
+        /* Theme: The Futurist (Alternative) */
+        [data-theme="futurist"] {
+            --bg-color: #020617; /* Deep Slate/Navy */
+            --surface-color: #0f172a;
+            --text-color: #e2e8f0;
+            --text-muted: #94a3b8;
+            --accent-color: #00f0ff; /* Cyan Neon */
+            --heading-font: 'Space Grotesk', sans-serif;
+            --body-font: 'JetBrains Mono', monospace;
+            --border-color: rgba(0, 240, 255, 0.3);
+            --img-opacity: 0.7;
+            --img-filter: hue-rotate(180deg) contrast(1.1) saturate(0.8);
+            
+             /* CHANGED: Solid Dark Background */
+            --nav-bg: #020617;
+            
+            --button-hover-bg: #00f0ff;
+            --button-hover-text: #000000;
+        }
+
+        /* Base Styles using Variables */
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--body-font);
+            transition: background-color 0.8s ease, color 0.8s ease;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, .serif {
+            font-family: var(--heading-font);
+        }
+
+        /* CHANGED: Navbar always has background */
+        #navbar {
+            background-color: var(--nav-bg);
+            border-bottom: 1px solid var(--border-color);
+            transition: padding 0.5s ease, background-color 0.8s ease;
+        }
+
+        /* Utility Classes for dynamic styles */
+        .border-dynamic { border-color: var(--border-color); }
+        .text-muted-dynamic { color: var(--text-muted); }
+        .bg-surface { background-color: var(--surface-color); }
+        .hover-btn { transition: all 0.3s; }
+        .hover-btn:hover {
+            background-color: var(--button-hover-bg);
+            color: var(--button-hover-text);
+            border-color: var(--button-hover-bg);
+        }
+
+        /* Image Handling */
+        .img-dynamic {
+            opacity: var(--img-opacity);
+            filter: var(--img-filter);
+            transition: opacity 0.8s, filter 0.8s, transform 1.4s;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { background: var(--text-muted); }
+
+        /* Loader */
+        #loader {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        /* Reveal Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* POPUP MODAL STYLES */
+        #investor-modal {
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        #investor-modal.hidden-modal {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        #investor-modal.visible-modal {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+        #modal-content {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            transform: scale(0.95);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        #investor-modal.visible-modal #modal-content {
+            transform: scale(1);
+        }
+
+        /* Aesthetic Switcher Panel */
+        #style-switcher {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            z-index: 100;
+            border-radius: 4px;
+            width: 260px;
+            transform: translateY(0);
+            transition: transform 0.4s ease, opacity 0.4s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        #style-switcher.hidden-panel {
+            transform: translateY(150%);
+            opacity: 0;
+        }
+        .theme-btn {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 8px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        .theme-btn:hover {
+            border-color: var(--accent-color);
+        }
+        .theme-btn.active {
+            background: var(--accent-color);
+            color: var(--bg-color); 
+            /* Invert text color for active state roughly */
+        }
+
+        #switcher-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 101;
+            background: var(--text-color);
+            color: var(--bg-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div id="loader" class="fixed inset-0 z-[9999] flex justify-center items-center transition-opacity duration-800">
+        <span class="serif text-xl md:text-2xl tracking-[0.3em] uppercase animate-pulse">NELSON TRINITY HOLDINGS</span>
+    </div>
+
+    <div id="investor-modal" class="fixed inset-0 z-[9000] flex items-center justify-center px-4 hidden-modal">
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" id="modal-backdrop" onclick="closeModal()"></div>
+        
+        <div id="modal-content" class="relative w-full max-w-lg p-8 md:p-12 shadow-2xl">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-muted-dynamic hover:text-[var(--accent-color)] transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+
+            <div class="text-center">
+                <p class="text-xs tracking-[0.3em] uppercase text-muted-dynamic mb-4">Institutional Access</p>
+                <h3 class="serif text-3xl md:text-4xl mb-6 leading-tight">Exclusive Deal Flow & Market Intelligence</h3>
+                <p class="text-muted-dynamic font-light text-sm leading-relaxed mb-8">
+                    Join our institutional network for priority access to off-market real estate equity opportunities and venture capital prospectuses.
+                </p>
+
+                <form action="https://formspree.io/f/xeodegng" method="POST" class="space-y-4 text-left">
+                    
+                    <div class="flex items-start space-x-3 mb-6">
+                        <input type="checkbox" id="accredited" name="accredited" required class="mt-1 accent-[var(--accent-color)] cursor-pointer">
+                        <label for="accredited" class="text-[10px] md:text-xs text-muted-dynamic uppercase tracking-wider cursor-pointer select-none">
+                            I certify that I am an accredited investor or institutional representative.
+                        </label>
+                    </div>
+
+                    <div class="relative">
+                        <input type="email" name="email" placeholder="INSTITUTIONAL EMAIL ADDRESS" required 
+                               class="w-full bg-transparent border-b border-dynamic py-3 text-sm tracking-widest uppercase focus:outline-none focus:border-[var(--accent-color)] placeholder-[var(--text-muted)] transition-colors"
+                               style="color: var(--text-color);">
+                    </div>
+                    
+                    <div class="pt-4">
+                        <button type="submit" class="w-full border border-dynamic py-3 text-xs tracking-[0.2em] uppercase hover-btn transition-all">
+                            Request Access
+                        </button>
+                    </div>
+                    
+                    <input type="hidden" name="_subject" value="Institutional Investor Access Request">
+                    <p class="text-[9px] text-center text-muted-dynamic pt-4 opacity-60">
+                        By subscribing, you agree to receive confidential investment memorandums.
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="switcher-toggle" onclick="togglePanel()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+    </div>
+
+    <div id="style-switcher" class="hidden-panel">
+        <p class="text-xs uppercase tracking-widest mb-4 font-bold" style="color: var(--text-muted)">Select Aesthetic</p>
+        <div class="theme-btn active" onclick="setTheme('institution', this)">
+            <span class="w-3 h-3 rounded-full bg-[#fdfbf7] border border-green-800 mr-3"></span> The Institution (Default)
+        </div>
+        <div class="theme-btn" onclick="setTheme('mogul', this)">
+            <span class="w-3 h-3 rounded-full bg-[#050505] border border-white mr-3"></span> The Mogul (Dark)
+        </div>
+        <div class="theme-btn" onclick="setTheme('futurist', this)">
+            <span class="w-3 h-3 rounded-full bg-[#020617] border border-cyan-400 mr-3"></span> The Futurist (Tech)
+        </div>
+    </div>
+
+    <nav id="navbar" class="fixed w-full z-50 py-6 px-6 md:px-12">
+        <div class="flex justify-between items-center">
+            <a href="#" class="serif text-xl md:text-2xl tracking-widest font-semibold uppercase z-50 relative">NELSON TRINITY HOLDINGS</a>
+
+            <div class="hidden md:flex space-x-12 text-xs tracking-[0.2em] uppercase">
+                <a href="#thesis" class="hover:text-[var(--accent-color)] transition-colors pb-1">Strategy</a>
+                <a href="#portfolio" class="hover:text-[var(--accent-color)] transition-colors pb-1">Portfolio</a>
+                <a href="#contact" class="hover:text-[var(--accent-color)] transition-colors pb-1">Contact</a>
+            </div>
+
+            <button id="menu-btn" class="md:hidden z-50 focus:outline-none">
+                <div class="w-6 h-px bg-[var(--text-color)] mb-1.5 transition-all" id="bar1"></div>
+                <div class="w-6 h-px bg-[var(--text-color)] transition-all" id="bar2"></div>
+            </button>
+        </div>
+    </nav>
+
+    <div id="mobile-menu" class="fixed inset-0 bg-[var(--bg-color)] z-40 transform translate-x-full transition-transform duration-500 flex flex-col justify-center items-center">
+        <div class="flex flex-col space-y-8 text-center">
+            <a href="#thesis" class="serif text-3xl text-muted-dynamic hover:text-[var(--text-color)] transition-colors mobile-link">Strategy</a>
+            <a href="#portfolio" class="serif text-3xl text-muted-dynamic hover:text-[var(--text-color)] transition-colors mobile-link">Portfolio</a>
+            <a href="#contact" class="serif text-3xl text-muted-dynamic hover:text-[var(--text-color)] transition-colors mobile-link">Contact</a>
+        </div>
+    </div>
+
+    <header class="relative h-screen w-full overflow-hidden flex items-center justify-center">
+        <div class="relative z-10 text-center px-4">
+            <p class="text-xs md:text-sm tracking-[0.4em] uppercase mb-4 text-muted-dynamic reveal delay-100">Real Estate Equity &middot; Specialized Venture Capital</p>
+            <h1 class="text-5xl md:text-7xl lg:text-9xl font-light mb-8 tracking-wide reveal delay-200">STABILITY &<br>SCIENCE</h1>
+            <div class="mt-8 reveal delay-300">
+                <a href="#thesis" class="inline-block border border-dynamic px-8 py-3 text-xs tracking-[0.2em] uppercase hover-btn transition-all duration-500">
+                    Thesis
+                </a>
+            </div>
+        </div>
+        
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce text-muted-dynamic">
+            <span class="block h-12 w-px bg-current opacity-30"></span>
+        </div>
+    </header>
+
+    <section id="thesis" class="py-24 md:py-40 px-6 md:px-20 max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+            <div class="reveal">
+                <span class="block h-px w-12 bg-[var(--text-color)] mb-8"></span>
+                <h2 class="text-3xl md:text-5xl leading-tight mb-8">Tomorrow's Infrastructure.<br>Real Engineering.<br><span class="text-muted-dynamic italic">A triple mandate.</span></h2>
+                <p class="text-muted-dynamic font-light leading-relaxed max-w-md">
+                    Nelson Trinity Holdings operates with a disciplined three-pillar focus: income-generating real estate in prestigious corridors, biomedical software engineering, and critical infrastructure security through backend, cybersecurity, and cryptographic technologies.
+                </p>
+                <div class="mt-12">
+                     <a href="#" class="text-xs tracking-[0.2em] uppercase border-b border-dynamic pb-2 hover:text-[var(--accent-color)] transition-colors">Read The 2025 Outlook</a>
+                </div>
+            </div>
+            <div class="relative reveal delay-200 overflow-hidden">
+                <img src="sky.jpeg" alt="Buckhead Skyline" class="w-full h-full object-cover img-dynamic hover:scale-105 transition-transform duration-[1.5s]">
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio" class="py-20 bg-surface">
+        <div class="px-6 md:px-12 mb-16 flex justify-between items-end reveal">
+            <h2 class="text-4xl md:text-6xl serif">The Portfolio</h2>
+            <a href="#" class="hidden md:block text-xs tracking-[0.2em] uppercase text-muted-dynamic hover:text-[var(--text-color)]">Strictly Three Domains</a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 px-0 md:px-4 max-w-7xl mx-auto">
+            
+            <div class="group relative cursor-pointer reveal delay-100">
+                <div class="overflow-hidden aspect-[4/3] relative">
+                    <img src="building.jpeg" alt="Luxury Buckhead Apartment" class="w-full h-full object-cover img-dynamic group-hover:scale-105 transition-transform duration-[1.5s]">
+                </div>
+                <div class="absolute bottom-0 left-0 p-8 w-full transition-all duration-500" style="background: rgba(0, 0, 0, 0.65);">
+                    <h3 class="serif text-2xl italic" style="color: #ffffff;">Real Estate Index Fund</h3>
+                    <p class="text-xs tracking-widest mt-1" style="color: #ffffff;">ATLANTA, GA - LOS ANGELES, CA/ YIELD FOCUSED</p>
+                    <div class="overflow-hidden transition-all duration-1000 max-h-0 opacity-0 group-hover:max-h-96 group-hover:opacity-100">
+                        <p class="text-sm mt-3 max-w-md" style="color: #ffffff;">A curated collection of Class-A multi-family and mixed-use assets in metro-Atlanta, Buckhead, and West Los Angeles corridor.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group relative cursor-pointer reveal delay-200">
+                <div class="overflow-hidden aspect-[4/3] relative">
+                    <img src="robot.jpeg" alt="Biomedical Software Interface" class="w-full h-full object-cover img-dynamic group-hover:scale-105 transition-transform duration-[1.5s]">
+                </div>
+                <div class="absolute bottom-0 left-0 p-8 w-full transition-all duration-500" style="background: rgba(0, 0, 0, 0.65);">
+                    <h3 class="serif text-2xl italic" style="color: #ffffff;">Biomedical Engineering</h3>
+                    <p class="text-xs tracking-widest mt-1" style="color: #ffffff;">ROBOTIC SURGICAL VISION</p>
+                    <div class="overflow-hidden transition-all duration-1000 max-h-0 opacity-0 group-hover:max-h-96 group-hover:opacity-100">
+                        <p class="text-sm mt-3 max-w-md" style="color: #ffffff;">Collaboration with Imperial College London Hamyln Centre and University of Oxford for future developments in applying real AI for in-vivo surgical vision</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group relative cursor-pointer reveal delay-300">
+                <div class="overflow-hidden aspect-[4/3] relative">
+                    <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=2070&auto=format&fit=crop" alt="Critical Infrastructure Security" class="w-full h-full object-cover img-dynamic group-hover:scale-105 transition-transform duration-[1.5s]" style="filter: contrast(1.8) saturate(0.3) brightness(0.7);">
+                    <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/50 to-black/70"></div>
+                </div>
+                <div class="absolute bottom-0 left-0 p-8 w-full transition-all duration-500" style="background: rgba(0, 0, 0, 0.65);">
+                    <h3 class="serif text-2xl italic" style="color: #ffffff;">Infrastructure & Security</h3>
+                    <p class="text-xs tracking-widest mt-1" style="color: #ffffff;">CRITICAL SYSTEMS / DEFENSE GRADE</p>
+                    <div class="overflow-hidden transition-all duration-1000 max-h-0 opacity-0 group-hover:max-h-96 group-hover:opacity-100">
+                        <p class="text-sm mt-3 max-w-md" style="color: #ffffff;">Strategic investments in backend infrastructure, cybersecurity, and cryptographic technologies serving high-criticality sectors including government agencies and healthcare institutions with advanced security architecture.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+        <div class="mt-12 text-center md:hidden">
+             <a href="#" class="text-xs tracking-[0.2em] uppercase text-muted-dynamic border-b border-dynamic pb-1">View Fund Performance</a>
+        </div>
+    </section>
+
+
+    <section class="py-24 md:py-40 px-6 md:px-20" style="background-color: var(--text-color); color: var(--bg-color);">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+            <div class="md:col-span-5 order-2 md:order-1 reveal">
+                <h2 class="text-4xl md:text-6xl serif mb-8">Stability Through<br>Strategic Diversity.</h2>
+                <p class="font-light opacity-80 leading-relaxed mb-8">
+                    Nelson Trinity Holdings operates at the intersection of tangible assets and transformative technology. Our core real estate holdings in premier urban corridors generate consistent cash flow, while our venture investments target breakthrough innovations in surgical robotics and critical infrastructure security—sectors where technological advancement meets urgent societal need.
+                </p>
+                <ul class="space-y-4 text-sm tracking-widest uppercase opacity-70">
+                    <li class="flex items-center"><span class="w-2 h-2 bg-current mr-4 rounded-full"></span>Class-A Urban Real Estate</li>
+                    <li class="flex items-center"><span class="w-2 h-2 bg-current mr-4 rounded-full"></span>AI-Powered Medical Technology</li>
+                    <li class="flex items-center"><span class="w-2 h-2 bg-current mr-4 rounded-full"></span>Defense-Grade Infrastructure</li>
+                    <li class="flex items-center"><span class="w-2 h-2 bg-current mr-4 rounded-full"></span>Cryptographic Security Systems</li>
+                </ul>
+            </div>
+            <div class="md:col-span-7 order-1 md:order-2 relative reveal delay-200">
+                <div class="aspect-video w-full overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop" alt="Modern Architecture" class="w-full h-full object-cover img-dynamic">
+                </div>
+                <div class="absolute -bottom-10 -left-10 p-8 hidden md:block" style="background-color: var(--bg-color); color: var(--text-color);">
+                     <p class="serif text-2xl italic">Allocation</p>
+                     <p class="text-xs tracking-widest uppercase mt-2">60% Real Estate / 20% Biomedical / 20% Cybersecurity & Cryptography</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-16 px-6 md:px-20 border-t border-dynamic">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-wrap justify-center items-end gap-16 md:gap-20">
+                <a href="https://www.ox.ac.uk/" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center text-center">
+                    <div class="h-32 w-32 md:h-40 md:w-40 flex items-center justify-center mb-4 transition-all duration-300 hover:-translate-y-2 cursor-pointer">
+                        <img src="oxford.png" alt="University of Oxford" class="max-h-full max-w-full object-contain">
+                    </div>
+                    <span class="text-xs tracking-[0.2em] uppercase text-muted-dynamic hover:text-[var(--accent-color)] transition-colors">University of Oxford</span>
+                </a>
+                
+                <a href="https://www.imperial.ac.uk/" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center text-center">
+                    <div class="h-40 w-64 md:h-48 md:w-80 flex items-center justify-center mb-4 transition-all duration-300 hover:-translate-y-2 cursor-pointer">
+                        <img src="imperial.png" alt="Imperial College London" class="max-h-full max-w-full object-contain">
+                    </div>
+                    <span class="text-xs tracking-[0.2em] uppercase text-muted-dynamic hover:text-[var(--accent-color)] transition-colors">Imperial College London</span>
+                </a>
+
+                <a href="https://www.imperial.ac.uk/hamlyn-centre/" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center text-center">
+                    <div class="h-40 w-64 md:h-48 md:w-80 flex items-center justify-center mb-4 transition-all duration-300 hover:-translate-y-2 cursor-pointer">
+                        <img src="hamyln.jpg" alt="The Hamlyn Centre" class="max-h-full max-w-full object-contain">
+                    </div>
+                    <span class="text-xs tracking-[0.2em] uppercase text-muted-dynamic hover:text-[var(--accent-color)] transition-colors">The Hamlyn Centre</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="relative py-32 px-6 md:px-20 overflow-hidden">
+        <div class="absolute inset-0">
+            <img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=2070&auto=format&fit=crop" alt="Buckhead Atlanta Skyline" class="w-full h-full object-cover img-dynamic">
+            <div class="absolute inset-0 bg-black/50"></div>
+        </div>
+
+        <div class="relative z-10 max-w-4xl mx-auto text-center reveal">
+            <p class="text-xs tracking-[0.3em] uppercase mb-4" style="color: #ffffff; text-shadow: 0 2px 8px rgba(0,0,0,0.8);">OUR LOCATION</p>
+            <h2 class="serif text-4xl md:text-5xl lg:text-6xl mb-6" style="color: #ffffff; text-shadow: 0 4px 12px rgba(0,0,0,0.9);">Headquartered in Buckhead</h2>
+            <p class="font-light mb-8" style="color: #ffffff; text-shadow: 0 2px 8px rgba(0,0,0,0.8);">
+                Atlanta's premier business district
+            </p>
+            <div class="border-t pt-8 inline-block" style="border-color: rgba(255, 255, 255, 0.4);">
+                <p class="serif text-2xl mb-2" style="color: #ffffff; text-shadow: 0 3px 10px rgba(0,0,0,0.9);">3017 Bolling Way Northeast</p>
+                <p class="text-sm" style="color: #ffffff; text-shadow: 0 2px 8px rgba(0,0,0,0.8);">Atlanta, GA 30305 • Buckhead Village</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="pt-24 pb-12 px-6 md:px-20 border-t border-dynamic">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 mb-20">
+            <div class="col-span-1 md:col-span-2">
+                <a href="#" class="serif text-3xl mb-8 block">NELSON TRINITY HOLDINGS</a>
+                <p class="text-muted-dynamic max-w-xs font-light">
+                    Real Estate Equity & Specialized Venture Capital.
+                </p>
+                <p class="text-muted-dynamic text-xs mt-4 uppercase tracking-widest">
+                    3017 Bolling Way Northeast<br>Atlanta, GA 30305
+                </p>
+            </div>
+
+            <div class="space-y-4">
+                <div class="mb-6">
+                    <h4 class="text-xs tracking-[0.2em] uppercase inline-block">Contact</h4>
+                    <a href="mailto:contact@nelsontrinityholdings.org" class="text-xs text-muted-dynamic hover:text-[var(--accent-color)] transition-colors ml-3">contact@nelsontrinityholdings.org</a>
+                </div>
+                <a href="mailto:contact@nelsontrinityholdings.org?subject=General%20Inquiry&body=Dear%20Nelson%20Trinity%20Holdings%20Team%2C%0D%0A%0D%0AI%20am%20reaching%20out%20regarding%3A%0D%0A%0D%0A%5BPlease%20describe%20your%20inquiry%5D%0D%0A%0D%0AThank%20you%20for%20your%20time%20and%20consideration.%0D%0A%0D%0ABest%20regards%2C%0D%0A%5BYour%20Name%5D" class="block text-muted-dynamic hover:text-[var(--accent-color)] transition-colors text-sm">Inquire</a>
+                <a href="mailto:contact@nelsontrinityholdings.org?subject=Pitch%20Submission&body=Dear%20Nelson%20Trinity%20Holdings%20Investment%20Team%2C%0D%0A%0D%0AI%20would%20like%20to%20submit%20a%20pitch%20for%20your%20consideration%3A%0D%0A%0D%0ACompany%2FProject%20Name%3A%20%0D%0AIndustry%20Sector%3A%20%5BReal%20Estate%20%2F%20Biomedical%5D%0D%0AFunding%20Stage%3A%20%0D%0AAmount%20Sought%3A%20%0D%0A%0D%0AExecutive%20Summary%3A%0D%0A%5BPlease%20provide%20a%20brief%20overview%20of%20your%20opportunity%5D%0D%0A%0D%0APlease%20find%20attached%20our%20pitch%20deck%20and%20supporting%20materials.%0D%0A%0D%0AThank%20you%20for%20your%20consideration.%0D%0A%0D%0ABest%20regards%2C%0D%0A%5BYour%20Name%5D%0D%0A%5BTitle%5D%0D%0A%5BContact%20Information%5D" class="block text-muted-dynamic hover:text-[var(--accent-color)] transition-colors text-sm">Submit Pitch</a>
+                <a href="mailto:contact@nelsontrinityholdings.org?subject=Annual%20Reports%20Request&body=Dear%20Nelson%20Trinity%20Holdings%20Team%2C%0D%0A%0D%0AI%20would%20like%20to%20request%20access%20to%20your%20annual%20performance%20reports.%0D%0A%0D%0AInvestor%20Status%3A%20%5BAccredited%20Investor%20%2F%20Prospective%20Investor%5D%0D%0ASpecific%20Reports%20Requested%3A%20%0D%0A%0D%0AThank%20you%20for%20your%20assistance.%0D%0A%0D%0ABest%20regards%2C%0D%0A%5BYour%20Name%5D%0D%0A%5BContact%20Information%5D" class="block text-muted-dynamic hover:text-[var(--accent-color)] transition-colors text-sm">Annual Reports</a>
+                <a href="mailto:contact@nelsontrinityholdings.org?subject=Legal%20Inquiry&body=Dear%20Nelson%20Trinity%20Holdings%20Legal%20Team%2C%0D%0A%0D%0AI%20am%20writing%20regarding%20a%20legal%20matter%3A%0D%0A%0D%0ANature%20of%20Inquiry%3A%20%0D%0A%0D%0A%5BPlease%20describe%20the%20legal%20matter%20or%20question%5D%0D%0A%0D%0AThank%20you%20for%20your%20attention%20to%20this%20matter.%0D%0A%0D%0ABest%20regards%2C%0D%0A%5BYour%20Name%5D%0D%0A%5BContact%20Information%5D" class="block text-muted-dynamic hover:text-[var(--accent-color)] transition-colors text-sm">Legal</a>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto border-t border-dynamic pt-12 flex flex-col md:flex-row justify-between items-end">
+            <div class="w-full md:w-1/2 mb-8 md:mb-0">
+                <h4 class="text-2xl serif italic mb-4">Quarterly Performance.</h4>
+                <form action="https://formspree.io/f/xeodegng" method="POST" class="flex border-b border-dynamic pb-2">
+                    <input type="email" name="email" placeholder="ACCREDITED INVESTOR EMAIL" required class="bg-transparent w-full focus:outline-none text-sm tracking-widest uppercase placeholder-[var(--text-muted)] text-[var(--text-color)]">
+                    <input type="hidden" name="_subject" value="New Newsletter Subscription - Nelson Trinity Holdings">
+                    <input type="hidden" name="_next" value="https://nelsontrinityholdings.org">
+                    <button type="submit" class="text-xs uppercase tracking-[0.2em] hover:text-[var(--accent-color)] transition-colors">Subscribe</button>
+                </form>
+            </div>
+            <div class="flex space-x-6">
+                <a href="https://www.linkedin.com/company/nelson-trinity-holdings" class="text-muted-dynamic hover:text-[var(--accent-color)] text-xs uppercase">LinkedIn</a>
+            </div>
+        </div>
+
+
+        <div class="text-center mt-20">
+            <p class="text-[10px] text-muted-dynamic uppercase tracking-widest">&copy; 2025 Nelson Trinity Holdings LLC. All Rights Reserved. <br>Investments involve risk. Past performance is not indicative of future results.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Theme Logic ---
+        function togglePanel() {
+            const panel = document.getElementById('style-switcher');
+            panel.classList.toggle('hidden-panel');
+            
+            // Rotate icon for effect
+            const toggle = document.getElementById('switcher-toggle');
+            toggle.style.transform = panel.classList.contains('hidden-panel') ? 'rotate(0deg)' : 'rotate(180deg)';
+        }
+
+        function setTheme(themeName, btnElement) {
+            // Set theme attribute on html or body
+            if (themeName === 'institution') {
+                document.documentElement.setAttribute('data-theme', themeName);
+            } else if (themeName === 'mogul') {
+                document.documentElement.setAttribute('data-theme', 'mogul');
+            } else if (themeName === 'futurist') {
+                document.documentElement.setAttribute('data-theme', 'futurist');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+            }
+
+            // Update UI buttons
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            btnElement.classList.add('active');
+        }
+
+        // --- Investor Modal Logic ---
+        function openModal() {
+            const modal = document.getElementById('investor-modal');
+            modal.classList.remove('hidden-modal');
+            modal.classList.add('visible-modal');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('investor-modal');
+            modal.classList.remove('visible-modal');
+            modal.classList.add('hidden-modal');
+            
+            // Set session storage so it doesn't pop up again in this session
+            sessionStorage.setItem('nelson_investor_popup_seen', 'true');
+        }
+
+        // --- Standard Site Logic ---
+
+        // Wait for window load to remove loader
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            loader.style.opacity = '0';
+            setTimeout(() => {
+                loader.style.display = 'none';
+                
+                // NEW: Trigger Modal after loader finishes (wait 3.5 seconds for effect)
+                // It checks sessionStorage to see if they've already closed it once this session
+                if (!sessionStorage.getItem('nelson_investor_popup_seen')) {
+                    setTimeout(openModal, 3500); 
+                }
+                
+            }, 800);
+        });
+
+        // Mobile Menu Toggle
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const bar1 = document.getElementById('bar1');
+        const bar2 = document.getElementById('bar2');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+        let isMenuOpen = false;
+
+        menuBtn.addEventListener('click', () => {
+            isMenuOpen = !isMenuOpen;
+            if(isMenuOpen) {
+                mobileMenu.classList.remove('translate-x-full');
+                bar1.classList.add('rotate-45', 'translate-y-1');
+                bar2.classList.add('-rotate-45', '-translate-y-0.5');
+                document.body.style.overflow = 'hidden';
+            } else {
+                mobileMenu.classList.add('translate-x-full');
+                bar1.classList.remove('rotate-45', 'translate-y-1');
+                bar2.classList.remove('-rotate-45', '-translate-y-0.5');
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Close mobile menu on link click
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                isMenuOpen = false;
+                mobileMenu.classList.add('translate-x-full');
+                bar1.classList.remove('rotate-45', 'translate-y-1');
+                bar2.classList.remove('-rotate-45', '-translate-y-0.5');
+                document.body.style.overflow = 'auto';
+            });
+        });
+
+        // Navbar Size Change on Scroll (Background is now permanent in CSS)
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.remove('py-6');
+                navbar.classList.add('py-4');
+            } else {
+                navbar.classList.remove('py-4');
+                navbar.classList.add('py-6');
+            }
+        });
+
+        // Intersection Observer for Reveal Animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target); // Only animate once
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth Scrolling for Anchor Links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
